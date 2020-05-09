@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useReducer, useMemo } from 'react'
+import Container from 'react-bootstrap/Container'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+//context 
+import UserContextProvider from './context/context'
+import { initialState, userReducer} from './reducers/userReducer'
+//components
+import Login from './components/login/Login'
+import PrivateRoute from './components/PrivateRoute'
+import Home from './components/app/Home'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+
+const App = () => {
+    const [ state, dispatch ] = useReducer(userReducer, initialState)
+    const values = useMemo(() => ({
+        state,
+        dispatch
+    }), [ state, dispatch ])
+
+    return(
+        <UserContextProvider value={values} >
+            <Router>
+                <Container className="h-100 bg-dark">
+                    <PrivateRoute 
+                        path='/'
+                        exact
+                        component={Home}
+                        isAuth={state.credentials.sesion_id}
+                    />
+                    <Route
+                        path="/auth"
+                        component={Login}
+                    />
+                </Container>
+            </Router>
+        </UserContextProvider>
+    )
 }
 
-export default App;
+export default App
