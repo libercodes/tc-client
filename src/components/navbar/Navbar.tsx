@@ -9,13 +9,12 @@ import {
 import { UserContext } from '../../context/context'
 import { State } from '../../utils/types'
 import Modal from '../Modal'
-import { actions } from '../../reducers/userReducer'
 import Axios from 'axios'
 import { Redirect } from 'react-router-dom'
 import cookies from 'js-cookie'
 import {
     AccountCircle, ExitToApp
-} from '@material-ui/icons'
+} from '../Icons/ActionIcons'
 type Props = {
     setOpenSideBar: Dispatch<SetStateAction<boolean>>
     openSideBar: boolean

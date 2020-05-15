@@ -3,6 +3,7 @@ import Navbar from '../navbar/Navbar'
 import { Switch, Route } from 'react-router-dom'
 import Grupo from './Grupo/Grupo'
 import Usuario from './Usuario/Usuario'
+import Sesion from './Sesion/Sesion'
 import { Col, Row } from 'react-bootstrap'
 import styled from 'styled-components'
 import SideBar from '../navbar/SideBar'
@@ -51,6 +52,10 @@ const Home = () => {
                         <Route
                             path="/home/usuarios"
                             component={Usuario}
+                        />
+                        <Route
+                            path="/home/sesiones"
+                            component={Sesion}
                         />
 
                     </Switch>

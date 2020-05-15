@@ -4,7 +4,9 @@ import {
     Delete as DeleteMaterial,
     Visibility as VisibilityMaterial,
     Edit as EditMaterial,
-    Security as SecurityMaterial
+    Security as SecurityMaterial,
+    AccountCircle as AccountCircleMaterial,
+    ExitToApp as ExitToAppMaterial
 } from '@material-ui/icons'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
@@ -93,3 +95,15 @@ export const Security = (props: any) => {
         </OverlayTrigger>
     )
 }
+
+
+export const AccountCircle = styled(AccountCircleMaterial)`
+    :hover{
+        fill: #007bff;
+    }
+`
+export const ExitToApp = styled(ExitToAppMaterial)`
+    :hover{
+        fill: #DC3546;
+    }
+`

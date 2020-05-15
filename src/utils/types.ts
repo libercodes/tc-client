@@ -21,9 +21,9 @@ export interface Grupo {
 
 export interface Sesion {
     _id: string
-    usuario: Usuario
-    fechaDeInicio: Date
-    fechaDeFinalizacion: Date
+    usuario: any
+    fechaDeInicio: any
+    fechaDeFinalizacion: any
 }
 
 export interface Credentials {

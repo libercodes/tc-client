@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import {
     Group,
     Person,
-    History,
+    BarChart,
     Schedule
 } from '@material-ui/icons'
 
@@ -45,7 +45,7 @@ const SideBar = (props: any) => {
                     to="/home/movimientos" 
                     className="list-group-item list-group-item-action bg-light"
                 >
-                    <History/> Movimientos
+                    <BarChart/> Movimientos
                 </Link>
 
             </Nav>

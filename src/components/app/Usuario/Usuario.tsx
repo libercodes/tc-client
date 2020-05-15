@@ -18,7 +18,7 @@ import {
     Edit,
     Visibility
 } from '../../Icons/ActionIcons'
-
+import { PersonAdd } from '@material-ui/icons'
 
 const UsuarioComponent = () => {
     const state : State = useContext(UserContext).state
@@ -76,7 +76,16 @@ const UsuarioComponent = () => {
             <Container fluid className="h-100 justify-content-center align-items-center">
                 <Row className="justify-content-center">
                     <Col sm={8} className="bg-primary text-light py-2">
-                        <h2>Administrar <b>usuarios</b></h2>
+                        <Row>
+                            <Col sm={6} className="text-center">
+                                <h2>Administrar <b>usuarios</b></h2>
+                            </Col>
+                            <Col sm={6} className="text-center">
+                                <Button variant="success"> 
+                                    <PersonAdd/> Agregar usuario
+                                </Button>
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
                 <Row className="justify-content-center overflow-auto">

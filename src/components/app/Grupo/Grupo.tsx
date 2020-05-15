@@ -20,6 +20,8 @@ import {
     Visibility
 } from '../../Icons/ActionIcons'
 
+import { GroupAdd } from '@material-ui/icons'
+
 
 
 const GrupoComponent = () => {
@@ -79,7 +81,16 @@ const GrupoComponent = () => {
             <Container fluid className="h-100 justify-content-center align-items-center">
                 <Row className="justify-content-center">
                     <Col sm={8} className="bg-primary text-light py-2">
-                        <h2>Administrar <b>grupos</b></h2>
+                        <Row>
+                            <Col sm={6} className="text-center">
+                                <h2>Administrar <b>grupos</b></h2>
+                            </Col>
+                            <Col sm={6} className="text-center">
+                                <Button variant="success"> 
+                                    <GroupAdd/> Agregar Grupo
+                                </Button>
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
                 <Row className="justify-content-center overflow-auto">
