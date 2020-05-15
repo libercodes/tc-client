@@ -5,11 +5,10 @@ import LoginForm from './LoginForm'
 import RecuperarClaveForm from './RecuperarClaveForm'
 import EstablecerNuevaClaveForm from './EstablecerNuevaClaveForm'
 
-
 const Login = (prop: IProps) => {
     return(
         <div className="row h-100 justify-content-center align-items-center">
-            <div className="col-xs-12 col-md-6 col-lg-4 border rounded-lg p-4 bg-light">
+            <div className="col-xs-12 col-md-6 col-lg-3 border rounded-lg p-4 bg-light">
                 <Switch>
                     <Route
                         component={LoginForm}

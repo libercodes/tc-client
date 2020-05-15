@@ -4,8 +4,7 @@ import React, { useState, FunctionComponent, useContext } from 'react'
 import axios from 'axios'
 import { UserContext } from '../../context/context'
 import { actions } from '../../reducers/userReducer'
-
-
+import cookies from 'js-cookie'
 
 const LoginForm: FunctionComponent = (props) => {
     const { state, dispatch } = useContext(UserContext)
@@ -23,6 +22,10 @@ const LoginForm: FunctionComponent = (props) => {
                 type: actions.LOGIN,
                 payload: response.data
             })
+            const oneHour = 1/24
+            cookies.set('token', response.data.token , {
+                expires: oneHour
+            })
 
         } catch (error) {
             console.log(error.response.data.error)
@@ -35,7 +38,7 @@ const LoginForm: FunctionComponent = (props) => {
         <form onSubmit={(e: any) => handleLogin(e)}>
             <Form.Group>
                 {
-                    state.credentials.sesion_id &&
+                    state.isAuth &&
                     <Redirect to="/" />
                 }
                 <h2 className="modal-title m-3">Inicio de sesion</h2>

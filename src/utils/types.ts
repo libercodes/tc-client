@@ -27,11 +27,16 @@ export interface Sesion {
 }
 
 export interface Credentials {
-    sesion_id: string
     token: string
-    id: string
-    nombreDeUsuario: string
-    grupo: Grupo
+    usuario: {
+        _id: string
+        nombre: string
+        apellido: string
+        email: string
+        nombreDeUsuario: string
+        estado: string
+        grupo: Grupo
+    }
 }
 
 export interface Movimiento {
@@ -42,11 +47,14 @@ export interface Movimiento {
 }
 
 export type State = {
+    isAuth: boolean
     credentials: Credentials
     listaDeGrupos: Grupo[]
     listaDeUsuarios: Usuario[]
     listaDeMovimientos: Movimiento[]
     listaDeSesiones: Sesion[]
+    usuarioSeleccionado: Usuario
+    grupoSeleccionado: Grupo
 }
 
 export type Action =
@@ -62,6 +70,7 @@ export type Action =
     | { type: 'CONSULTAR_GRUPO';payload: Grupo[] }
     | { type: 'CONSULTAR_MOVIMIENTO'; payload: Movimiento[] }
     | { type: 'CONSULTAR_SESION'; payload: Sesion[] }
+    | { type: 'SELECCIONAR_GRUPO'; payload: Grupo }
 
 
 

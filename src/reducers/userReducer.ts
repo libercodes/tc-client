@@ -2,6 +2,7 @@ import { Action, State } from "../utils/types"
 
 export const actions = {
     GESTIONAR_USUARIO: {
+        OBTENER_USUARIO: "OBTENER_USUARIO",
         AGREGAR_USUARIO: "AGREGAR_USUARIO",
         MODIFICAR_USUARIO: "MODIFICAR_USUARIO",
         ELIMINAR_USUARIO: "ELIMINAR_USUARIO",
@@ -20,53 +21,92 @@ export const actions = {
         CONSULTAR_SESION: "CONSULTAR_SESION"
     },
     LOGIN: "LOGIN",
-    LOGOUT: "LOGOUT"
+    LOGOUT: "LOGOUT",
+    SELECCIONAR_GRUPO: "SELECCIONAR_GRUPO",
+    SELECCIONAR_USUARIO: "SELECCIONAR_USUARIO"
 
 }
 
 //export const initialState: State = {}
  export const initialState: State = {
+    isAuth: false,
     credentials: {
-        sesion_id: '',
-        nombreDeUsuario:  '',
-        id: '',
         token: '',
-        grupo: {
+        usuario: {
             _id: '',
             nombre: '',
-            acciones: []
+            apellido: '',
+            email: '',
+            nombreDeUsuario: '',
+            estado: '',
+            grupo: {
+                _id: '',
+                nombre: '',
+                acciones: []
+            }
         }
     },
     listaDeGrupos: [],
     listaDeUsuarios: [],
     listaDeMovimientos: [],
     listaDeSesiones: [],
+    grupoSeleccionado: {
+        _id: '',
+        nombre: '',
+        acciones: []
+    },
+    usuarioSeleccionado: {
+        _id: '',
+        nombre: '',
+        apellido: '',
+        email: '',
+        nombreDeUsuario: '',
+        estado: '',
+        grupo: {
+            _id: '',
+            nombre: '',
+            acciones: []
+        }
+    }
 }
 
 
 
-
 export const userReducer = (state: State, action: Action): State => {
+    const ValidateAuth = (): boolean => (state.credentials.token != null && state.credentials.usuario._id != null) ? true : false
     switch(action.type) {
         case actions.LOGIN:
             return {
                 ...state,
-                credentials: { ...action.payload }
+                credentials: { ...action.payload },
+                isAuth: true
+            }
+        case actions.GESTIONAR_USUARIO.OBTENER_USUARIO:
+            return {
+                ...state,
+                credentials: { ...action.payload},
+                isAuth: true
             }
         case actions.LOGOUT:
             return {
                 ...state,
                 credentials: {
-                    sesion_id: '',
                     token: '',
-                    id: '',
-                    nombreDeUsuario: '',
-                    grupo: {
-                        nombre: '',
+                    usuario: {
                         _id: '',
-                        acciones: []
+                        nombre: '',
+                        apellido: '',
+                        email: '',
+                        nombreDeUsuario: '',
+                        estado: '',
+                        grupo: {
+                            _id: '',
+                            nombre: '',
+                            acciones: []
+                        }
                     }
-                }
+                },
+                isAuth: false
             }
         case actions.GESTIONAR_USUARIO.CONSULTAR_USUARIO: 
             return {
@@ -129,6 +169,16 @@ export const userReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 listaDeSesiones: [...action.payload]
+            }
+        case actions.SELECCIONAR_GRUPO: 
+            return {
+                ...state,
+                grupoSeleccionado: action.payload
+            }
+         case actions.SELECCIONAR_USUARIO: 
+            return {
+                ...state,
+                usuarioSeleccionado: action.payload
             }
         default:
             return state
