@@ -1,10 +1,12 @@
 import React from 'react'
+import { State, Action } from '../utils/types';
+import { initialState } from '../reducers/userReducer'
 interface IContext {
-    state: any
-    dispatch: any
+    state: State
+    dispatch: React.Dispatch<Action>
 }
 const initialContext: IContext = {
-    state: {},
+    state: initialState,
     dispatch: () => {}
 }
 

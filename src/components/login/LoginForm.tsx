@@ -7,7 +7,7 @@ import { actions } from '../../reducers/userReducer'
 import cookies from 'js-cookie'
 
 const LoginForm: FunctionComponent = (props) => {
-    const { state, dispatch } = useContext(UserContext)
+    const { state, dispatch }  = useContext(UserContext)
     const [ usuarioInput, setUsuarioInput ] = useState('')
     const [ claveInput, setClaveInput ] = useState('')
     const [ error, setError ] = useState('')
@@ -16,10 +16,11 @@ const LoginForm: FunctionComponent = (props) => {
         e.preventDefault()
         const payload = { nombreDeUsuario: usuarioInput, clave: claveInput }
         try {
+            dispatch({ type: "SET_IS_LOADING", payload: true })
             let response = await axios.post('/api/login', payload)
 
             dispatch({
-                type: actions.LOGIN,
+                type: "LOGIN",
                 payload: response.data
             })
             const oneHour = 1/24
@@ -31,6 +32,8 @@ const LoginForm: FunctionComponent = (props) => {
             console.log(error.response.data.error)
             setError(error.response.data.error)
         } 
+        dispatch({ type: "SET_IS_LOADING", payload: false })
+        
 
     }
 

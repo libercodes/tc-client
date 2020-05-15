@@ -23,7 +23,8 @@ export const actions = {
     LOGIN: "LOGIN",
     LOGOUT: "LOGOUT",
     SELECCIONAR_GRUPO: "SELECCIONAR_GRUPO",
-    SELECCIONAR_USUARIO: "SELECCIONAR_USUARIO"
+    SELECCIONAR_USUARIO: "SELECCIONAR_USUARIO",
+    SET_IS_LOADING: "SET_IS_LOADING"
 
 }
 
@@ -67,7 +68,8 @@ export const actions = {
             nombre: '',
             acciones: []
         }
-    }
+    },
+    isLoading: false
 }
 
 
@@ -179,6 +181,11 @@ export const userReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 usuarioSeleccionado: action.payload
+            }
+        case actions.SET_IS_LOADING:
+            return {
+                ...state,
+                isLoading: action.payload
             }
         default:
             return state

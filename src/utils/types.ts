@@ -55,6 +55,7 @@ export type State = {
     listaDeSesiones: Sesion[]
     usuarioSeleccionado: Usuario
     grupoSeleccionado: Grupo
+    isLoading: boolean
 }
 
 export type Action =
@@ -71,6 +72,8 @@ export type Action =
     | { type: 'CONSULTAR_MOVIMIENTO'; payload: Movimiento[] }
     | { type: 'CONSULTAR_SESION'; payload: Sesion[] }
     | { type: 'SELECCIONAR_GRUPO'; payload: Grupo }
+    | { type: 'SELECCIONAR_USUARIO'; payload: Usuario }
+    | { type: 'SET_IS_LOADING'; payload: boolean }
 
 
 

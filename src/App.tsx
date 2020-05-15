@@ -11,9 +11,10 @@ import Login from './components/login/Login'
 import PrivateRoute from './components/PrivateRoute'
 import Home from './components/app/Home'
 import Loader from './components/Loader'
+
+
 const App = () => {
     const [ state, dispatch ] = useReducer(userReducer, initialState)
-    const [ loading, setLoading ] = useState(false)
     const values = useMemo(() => ({
         state,
         dispatch
@@ -21,6 +22,7 @@ const App = () => {
 
     useEffect(() => {
         const RecuperarSesion = async() => {
+            dispatch( { type: 'SET_IS_LOADING', payload: true })
             if(!state.isAuth){
                 const token = cookies.get('token')
                 if(token){
@@ -38,11 +40,10 @@ const App = () => {
                             usuario: response.data
                         }
                     })
-                    setLoading(false)
                 }
+                dispatch({ type: "SET_IS_LOADING", payload: false})
             }
         }
-        setLoading(true)
         RecuperarSesion()
     }, [])
 
@@ -51,7 +52,7 @@ const App = () => {
         <UserContextProvider value={values} >
             <Router>
                 {
-                    loading && <Loader />
+                    state.isLoading && <Loader />
                 }
                 <Container fluid className="bg-dark h-100">
                     <Route

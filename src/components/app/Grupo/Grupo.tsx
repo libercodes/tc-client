@@ -8,23 +8,29 @@ import {
     Row,
     Button
 } from 'react-bootstrap'
+
 import { UserContext } from '../../../context/context'
 import { State, Usuario, Grupo } from '../../../utils/types'
-import { actions } from '../../../reducers/userReducer'
 import Modal from '../../Modal'
 import getConfig from '../../../utils/axiosConfig'
+import { 
+    Edit,
+    Delete,
+    Security,
+    Visibility
+} from '../../Icons/ActionIcons'
+
 
 
 const GrupoComponent = () => {
     const state : State = useContext(UserContext).state
     const dispatch = useContext(UserContext).dispatch
     const [ showDeleteModal, SetShowDeleteModal ] = useState(false)
-    const [ modalDescription, setModalDescription ] = useState('')
     useEffect(() => {
         const getGrupos = async() => {
             let { data } = await axios.get('/api/admin/consultar-grupo', axiosConfig(state.credentials.token))
             dispatch({
-                type: actions.GESTIONAR_GRUPO.CONSULTAR_GRUPO,
+                type: 'CONSULTAR_GRUPO',
                 payload: data
             })
         }
@@ -36,8 +42,7 @@ const GrupoComponent = () => {
     }
 
     const handleShowModal = (grupo: Grupo) => {
-        setModalDescription(`Desea borrar el grupo "${state.grupoSeleccionado.nombre}"?`)
-        dispatch({ type: actions.SELECCIONAR_GRUPO, payload: grupo })
+        dispatch({ type: 'SELECCIONAR_GRUPO' , payload: grupo })
         SetShowDeleteModal(true)
     }
 
@@ -50,12 +55,10 @@ const GrupoComponent = () => {
             let { data } = await axios.delete(`/api/admin$/${grupo._id}`, getConfig(state.credentials.token))
             if(data){
                 dispatch({
-                    type: actions.GESTIONAR_GRUPO.ELIMINAR_GRUPO,
+                    type: "ELIMINAR_GRUPO",
                     payload: grupo
                 })
                 console.log(data)
-                setModalDescription('')
-                //setSelectedValue({})
                 SetShowDeleteModal(false)
             }
         }
@@ -68,7 +71,7 @@ const GrupoComponent = () => {
                 show={showDeleteModal}
                 onCancel={() => SetShowDeleteModal(false)}
                 title="Borrar grupo"
-                description={modalDescription}
+                description={`Desea borrar el grupo "${state.grupoSeleccionado.nombre}"?`}
                 nameAgreeButton={"Eliminar"}
                 onAgree={() => handleDelete(state.grupoSeleccionado)}
             />
@@ -96,22 +99,23 @@ const GrupoComponent = () => {
                                             <td>{grupo._id}</td>
                                             <td>{grupo.nombre}</td>
                                             <td>
-                                                <Button 
+                                                <Edit 
                                                     className="mx-1"
                                                     onClick={() => handleEdit(grupo)}
-                                                >Editar</Button>
-                                                <Button 
-                                                    variant="danger" 
+                                                >Editar</Edit>
+                                                <Delete
                                                     className="mx-1"
                                                     onClick={() => 
                                                         handleShowModal(grupo)
                                                     }
-                                                >Eliminar</Button>
-                                                <Button 
-                                                    variant="warning" 
+                                                >Eliminar</Delete>
+                                                <Security 
                                                     className="mx-1"
                                                     onClick={() => {}}
-                                                >Permisos</Button>
+                                                >Permisos</Security>
+                                                <Visibility
+                                                    onClick={()=>{}}
+                                                >Consultar</Visibility>
                                             </td>
                                         </Fragment>
                                     ))

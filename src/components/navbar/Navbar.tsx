@@ -13,7 +13,9 @@ import { actions } from '../../reducers/userReducer'
 import Axios from 'axios'
 import { Redirect } from 'react-router-dom'
 import cookies from 'js-cookie'
-
+import {
+    AccountCircle, ExitToApp
+} from '@material-ui/icons'
 type Props = {
     setOpenSideBar: Dispatch<SetStateAction<boolean>>
     openSideBar: boolean
@@ -34,7 +36,7 @@ const NavbarComponent = ({ setOpenSideBar, openSideBar }: Props) => {
         })
         cookies.remove('token')
         dispatch({
-            type: actions.LOGOUT
+            type: "LOGOUT", payload: null
         })
     }
     
@@ -70,12 +72,16 @@ const NavbarComponent = ({ setOpenSideBar, openSideBar }: Props) => {
                             <NavDropdown title={`Usuario: ${state.credentials.usuario.nombreDeUsuario}`} id="basic-nav-dropdown">
                                 <NavDropdown.Item
                                     href="#"
-                                >Perfil</NavDropdown.Item>
+                                > 
+                                    <AccountCircle /> Perfil
+                                </NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item
                                     href="#"
                                     onClick={() => setShowModal(true)}
-                                >Cerrar Sesion</NavDropdown.Item>
+                                >
+                                    <ExitToApp/> Cerrar Sesion
+                                    </NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>

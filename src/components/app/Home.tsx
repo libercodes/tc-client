@@ -19,7 +19,7 @@ const SideBarWrapper = styled(Col)`
 const Wrapper: any = styled.div`
     margin-left: ${(props: any) => props.show ? 0 : "-15%"};
     padding: 0;
-    transition: margin 0.5s ease-out;
+    transition: margin 0.25s ease-out;
     width: 15%;
     @media (max-width: 768px){
         width: 50%;

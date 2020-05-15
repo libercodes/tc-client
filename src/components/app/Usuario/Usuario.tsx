@@ -9,10 +9,15 @@ import {
     Button
 } from 'react-bootstrap'
 import { UserContext } from '../../../context/context'
-import { State, Usuario, Grupo } from '../../../utils/types'
-import { actions } from '../../../reducers/userReducer'
+import { State, Usuario } from '../../../utils/types'
 import Modal from '../../Modal'
 import getConfig from '../../../utils/axiosConfig'
+
+import { 
+    Delete,
+    Edit,
+    Visibility
+} from '../../Icons/ActionIcons'
 
 
 const UsuarioComponent = () => {
@@ -24,7 +29,7 @@ const UsuarioComponent = () => {
         const getUsuarios = async() => {
             let { data } = await axios.get('/api/admin/consultar-usuario', axiosConfig(state.credentials.token))
             dispatch({
-                type: actions.GESTIONAR_USUARIO.CONSULTAR_USUARIO,
+                type: "CONSULTAR_USUARIO",
                 payload: data
             })
         }
@@ -37,7 +42,7 @@ const UsuarioComponent = () => {
 
     const handleShowModal = (usuario: Usuario) => {
         setModalDescription(`Desea borrar el usuario "${state.usuarioSeleccionado.nombreDeUsuario}"?`)
-        dispatch({ type: actions.SELECCIONAR_USUARIO, payload: usuario })
+        dispatch({ type: "SELECCIONAR_USUARIO", payload: usuario })
         SetShowDeleteModal(true)
     }
 
@@ -46,7 +51,7 @@ const UsuarioComponent = () => {
         let { data } = await axios.delete(`/api/admin$/eliminar-usuario/${usuario._id}`, getConfig(state.credentials.token))
             if(data){
                 dispatch({
-                    type: actions.GESTIONAR_USUARIO.ELIMINAR_USUARIO,
+                    type: "ELIMINAR_USUARIO",
                     payload: usuario
                 })
                 console.log(data)
@@ -97,22 +102,19 @@ const UsuarioComponent = () => {
                                             <td>{usuario.nombreDeUsuario}</td>
                                             <td>{usuario.email}</td>
                                             <td>
-                                                <Button 
+                                                <Edit 
                                                     className="mx-1"
                                                     onClick={() => handleEdit(usuario)}
-                                                >Editar</Button>
-                                                <Button 
-                                                    variant="danger" 
+                                                >Editar</Edit>
+                                                <Delete 
                                                     className="mx-1"
                                                     onClick={() => 
                                                         handleShowModal(usuario)
                                                     }
-                                                >Eliminar</Button>
-                                                <Button 
-                                                    variant="warning" 
-                                                    className="mx-1"
+                                                >Eliminar</Delete>
+                                                <Visibility 
                                                     onClick={() => {}}
-                                                >Permisos</Button>
+                                                >Consultar</Visibility>
                                             </td>
                                         </Fragment>
                                     ))
