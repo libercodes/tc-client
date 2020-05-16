@@ -1,7 +1,7 @@
 import React from 'react'
 import { State, Action } from '../utils/types';
 import { initialState } from '../reducers/userReducer'
-interface IContext {
+export interface IContext {
     state: State
     dispatch: React.Dispatch<Action>
 }

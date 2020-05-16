@@ -78,7 +78,7 @@ const SesionComponent = () => {
                             <tbody>
                                 
                                 {
-                                    (state.listaDeSesiones.length > 0 ) && 
+                                    (filteredList.length > 0 ) && 
                                     
                                     filteredList.map(sesion => (
                                         <tr key={sesion._id}>

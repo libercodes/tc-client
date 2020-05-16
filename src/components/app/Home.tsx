@@ -7,8 +7,7 @@ import Sesion from './Sesion/Sesion'
 import { Col, Row } from 'react-bootstrap'
 import styled from 'styled-components'
 import SideBar from '../navbar/SideBar'
-import { Collapse, Fade } from 'react-bootstrap'
-
+import UsuarioForm from './Usuario/UsuarioForm'
 const PageContentWrapper = styled(Col)`
     min-width: 0;
     width: 100%;
@@ -42,7 +41,7 @@ const Home = () => {
             </Wrapper>
             <PageContentWrapper  className="mx-0 px-0">
                 <Navbar setOpenSideBar={setOpenSideBar} openSideBar={openSideBar}  />
-                <div className="container-fluid px-0">
+                <div className="container-fluid px-0 h-75">
                     <Switch>
 
                         <Route
@@ -52,10 +51,15 @@ const Home = () => {
                         <Route
                             path="/home/usuarios"
                             component={Usuario}
+                            exact
                         />
                         <Route
                             path="/home/sesiones"
                             component={Sesion}
+                        />
+                        <Route  
+                            path="/home/usuarios/agregar-usuario"
+                            component={UsuarioForm}
                         />
 
                     </Switch>

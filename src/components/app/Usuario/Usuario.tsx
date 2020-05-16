@@ -13,6 +13,7 @@ import { UserContext } from '../../../context/context'
 import { State, Usuario } from '../../../utils/types'
 import Modal from '../../Modal'
 import getConfig from '../../../utils/axiosConfig'
+import { Link } from 'react-router-dom'
 
 import { 
     Delete,
@@ -90,7 +91,12 @@ const UsuarioComponent = () => {
                             </Col>
                             <Col sm={6} className="text-center">
                                 <Button variant="success"> 
-                                    <PersonAdd/> Agregar usuario
+                                    <PersonAdd/> 
+                                    <Link
+                                        to="/home/usuarios/agregar-usuario"
+                                    >
+                                        Agregar usuario
+                                    </Link>
                                 </Button>
                             </Col>
                         </Row>
@@ -129,7 +135,7 @@ const UsuarioComponent = () => {
                                 {
                                     filteredList.length > 0 &&
                                     filteredList.map(usuario => (
-                                        <Fragment key={usuario._id}>
+                                        <tr key={usuario._id}>
                                             <td>{usuario._id}</td>
                                             <td>{usuario.nombre}</td>
                                             <td>{usuario.apellido}</td>
@@ -150,7 +156,7 @@ const UsuarioComponent = () => {
                                                     onClick={() => {}}
                                                 >Consultar</Visibility>
                                             </td>
-                                        </Fragment>
+                                        </tr>
                                     ))
                                 }
                             </tbody>
