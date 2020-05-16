@@ -36,9 +36,6 @@ const SesionComponent = () => {
         getSesiones()
     }, [])
 
-
-
-
     return(
         <Fragment>
             <Container fluid className="h-100 justify-content-center align-items-center">

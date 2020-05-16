@@ -6,7 +6,8 @@ import {
     Container, 
     Col, 
     Row,
-    Button
+    Button,
+    Form
 } from 'react-bootstrap'
 import { UserContext } from '../../../context/context'
 import { State, Usuario } from '../../../utils/types'
@@ -18,13 +19,20 @@ import {
     Edit,
     Visibility
 } from '../../Icons/ActionIcons'
-import { PersonAdd } from '@material-ui/icons'
+import { PersonAdd, Search } from '@material-ui/icons'
 
 const UsuarioComponent = () => {
     const state : State = useContext(UserContext).state
     const dispatch = useContext(UserContext).dispatch
     const [ showDeleteModal, SetShowDeleteModal ] = useState(false)
     const [ modalDescription, setModalDescription ] = useState('')
+    const [ filteredList, setFilteredList ] = useState(state.listaDeUsuarios)
+    useEffect(() => setFilteredList(state.listaDeUsuarios), [state.listaDeUsuarios])
+
+    const FilterList = (query: string) => 
+        setFilteredList(state.listaDeUsuarios.filter(usuario => usuario.nombreDeUsuario.toUpperCase().includes(query.toUpperCase())))
+
+    
     useEffect(() => {
         const getUsuarios = async() => {
             let { data } = await axios.get('/api/admin/consultar-usuario', axiosConfig(state.credentials.token))
@@ -34,7 +42,7 @@ const UsuarioComponent = () => {
             })
         }
         getUsuarios()
-    })
+    },[])
 
     const handleEdit = (usuario: Usuario) => {
 
@@ -88,6 +96,22 @@ const UsuarioComponent = () => {
                         </Row>
                     </Col>
                 </Row>
+                <Row className="justify-content-center my-3">
+                    <Col sm={8} className="bg-light py-2 rounded">
+                        <Row className="justify-content-center">
+                            <Col sm={1} xs={1} className="d-flex align-items-center justify-content-end p-0">
+                                <Search/>
+                            </Col>
+                            <Col sm={6} xs={10}>
+                                <Form.Control 
+                                    type="text"
+                                    placeholder="Nombre de usuario"
+                                    onChange={(e:any) => FilterList(e.target.value)}
+                                    />
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
                 <Row className="justify-content-center overflow-auto">
                     <Col sm={8}>
                         <Table variant="dark">
@@ -103,7 +127,8 @@ const UsuarioComponent = () => {
                             </thead>
                             <tbody>
                                 {
-                                    state.listaDeUsuarios.map(usuario => (
+                                    filteredList.length > 0 &&
+                                    filteredList.map(usuario => (
                                         <Fragment key={usuario._id}>
                                             <td>{usuario._id}</td>
                                             <td>{usuario.nombre}</td>

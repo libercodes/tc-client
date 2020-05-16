@@ -6,7 +6,8 @@ import {
     Container, 
     Col, 
     Row,
-    Button
+    Button,
+    Form
 } from 'react-bootstrap'
 
 import { UserContext } from '../../../context/context'
@@ -20,7 +21,7 @@ import {
     Visibility
 } from '../../Icons/ActionIcons'
 
-import { GroupAdd } from '@material-ui/icons'
+import { GroupAdd, Search } from '@material-ui/icons'
 
 
 
@@ -28,6 +29,13 @@ const GrupoComponent = () => {
     const state : State = useContext(UserContext).state
     const dispatch = useContext(UserContext).dispatch
     const [ showDeleteModal, SetShowDeleteModal ] = useState(false)
+
+    const [ filteredList, setFilteredList ] = useState(state.listaDeGrupos)
+    useEffect(() => setFilteredList(state.listaDeGrupos), [state.listaDeGrupos])
+
+    const FilterList = (query: string) => 
+        setFilteredList(state.listaDeGrupos.filter(grupo => grupo.nombre.toUpperCase().includes(query.toUpperCase())))
+
     useEffect(() => {
         const getGrupos = async() => {
             let { data } = await axios.get('/api/admin/consultar-grupo', axiosConfig(state.credentials.token))
@@ -37,7 +45,7 @@ const GrupoComponent = () => {
             })
         }
         getGrupos()
-    })
+    }, [])
 
     const handleEdit = (grupo: Grupo) => {
 
@@ -93,6 +101,22 @@ const GrupoComponent = () => {
                         </Row>
                     </Col>
                 </Row>
+                <Row className="justify-content-center my-3">
+                    <Col sm={8} className="bg-light py-2 rounded">
+                        <Row className="justify-content-center">
+                            <Col sm={1} xs={1} className="d-flex align-items-center justify-content-end p-0">
+                                <Search/>
+                            </Col>
+                            <Col sm={6} xs={10}>
+                                <Form.Control 
+                                    type="text"
+                                    placeholder="Nombre del grupo"
+                                    onChange={(e:any) => FilterList(e.target.value)}
+                                    />
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
                 <Row className="justify-content-center overflow-auto">
                     <Col sm={8}>
                         <Table variant="dark">
@@ -105,7 +129,8 @@ const GrupoComponent = () => {
                             </thead>
                             <tbody>
                                 {
-                                    state.listaDeGrupos.map(grupo => (
+                                    filteredList.length > 0 &&
+                                    filteredList.map(grupo => (
                                         <Fragment key={grupo._id}>
                                             <td>{grupo._id}</td>
                                             <td>{grupo.nombre}</td>
