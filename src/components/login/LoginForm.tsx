@@ -3,7 +3,6 @@ import { Form , Button, Alert} from 'react-bootstrap'
 import React, { useState, FunctionComponent, useContext } from 'react'
 import axios from 'axios'
 import { UserContext } from '../../context/context'
-import { actions } from '../../reducers/userReducer'
 import cookies from 'js-cookie'
 
 const LoginForm: FunctionComponent = (props) => {

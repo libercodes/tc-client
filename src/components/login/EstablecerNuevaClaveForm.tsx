@@ -29,7 +29,6 @@ const EstablecerNuevaClaveForm = () => {
             
             setMessage(response.data.message)
         } catch (error) {
-            console.error(error)
             setError(error.response.data.error)
         }
 
