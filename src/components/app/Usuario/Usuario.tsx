@@ -21,8 +21,10 @@ import {
     Visibility
 } from '../../Icons/ActionIcons'
 import { PersonAdd, Search } from '@material-ui/icons'
+import { useHistory } from 'react-router-dom'
 
 const UsuarioComponent = () => {
+    const history = useHistory()
     const state : State = useContext(UserContext).state
     const dispatch = useContext(UserContext).dispatch
     const [ showDeleteModal, SetShowDeleteModal ] = useState(false)
@@ -45,8 +47,14 @@ const UsuarioComponent = () => {
         getUsuarios()
     },[])
 
-    const handleEdit = (usuario: Usuario) => {
+    const handleModificar = (usuario: Usuario) => {
+        dispatch({ type: "SELECCIONAR_USUARIO", payload: usuario })
+        history.push(`/home/usuarios/modificar-usuario/${usuario._id}`)
+    }
 
+    const handleConsultar = (usuario: Usuario) => {
+        dispatch({ type: "SELECCIONAR_USUARIO", payload: usuario })
+        history.push(`/home/usuarios/consultar-usuario/${usuario._id}`)
     }
 
     const handleShowModal = (usuario: Usuario) => {
@@ -61,7 +69,7 @@ const UsuarioComponent = () => {
             if(data){
                 dispatch({
                     type: "ELIMINAR_USUARIO",
-                    payload: usuario
+                    payload: data
                 })
                 console.log(data)
                 setModalDescription('')
@@ -144,7 +152,7 @@ const UsuarioComponent = () => {
                                             <td>
                                                 <Edit 
                                                     className="mx-1"
-                                                    onClick={() => handleEdit(usuario)}
+                                                    onClick={() => handleModificar(usuario)}
                                                 >Editar</Edit>
                                                 <Delete 
                                                     className="mx-1"
@@ -153,7 +161,7 @@ const UsuarioComponent = () => {
                                                     }
                                                 >Eliminar</Delete>
                                                 <Visibility 
-                                                    onClick={() => {}}
+                                                    onClick={() => handleConsultar(usuario)}
                                                 >Consultar</Visibility>
                                             </td>
                                         </tr>

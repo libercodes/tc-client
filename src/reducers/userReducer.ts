@@ -133,7 +133,7 @@ export const userReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 listaDeUsuarios: state.listaDeUsuarios.filter(usuario =>
-                    usuario._id !== action.payload._id
+                    usuario._id !== action.payload
                 )
             }
         case actions.GESTIONAR_GRUPO.CONSULTAR_GRUPO:
@@ -159,7 +159,7 @@ export const userReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 listaDeGrupos: state.listaDeGrupos.filter(grupo =>
-                    grupo._id !== action.payload._id    
+                    grupo._id !== action.payload    
                 )
             }
         case actions.GESTIONAR_MOVIMIENTO.CONSULTAR_MOVIMIENTO:

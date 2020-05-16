@@ -4,10 +4,11 @@ import {
     Button ,
     Row,
     Col,
-    Alert
+    Alert,
+    Spinner
 } from 'react-bootstrap'
-import { useHistory, NavLink } from 'react-router-dom'
-import { IContext, UserContext  } from '../../../context/context'
+import { useHistory, useLocation } from 'react-router-dom'
+import { UserContext  } from '../../../context/context'
 import axios from 'axios'
 import axiosConfig from '../../../utils/axiosConfig'
 
@@ -20,9 +21,39 @@ const UsuarioForm: FunctionComponent = (props) => {
     const [ inputClave, setInputClave ] = useState('')
     const [ inputConfirmarClave, setInputConfirmarClave ] = useState('')
     const [ inputGrupo, setInputGrupo ] = useState('')
+    const [ inputEstado, setInputEstado ] = useState('')
 
+    const [ isLoading, setIsLoading ] = useState(false)
     const [ error, setError ] = useState('')
     const [ message, setMessage ] = useState('')
+    const [ modo, setModo ] = useState('')
+    const { state, dispatch } = useContext(UserContext)
+    const history = useHistory()
+    const location = useLocation()
+    
+    useEffect(() => {
+        if (location.pathname == "/home/usuarios/agregar-usuario") {
+            setModo('A')
+        } else if (location.pathname.includes("/home/usuarios/modificar-usuario")) {
+            setModo('M')
+            setInputNombre(state.usuarioSeleccionado.nombre)
+            setInputApellido(state.usuarioSeleccionado.apellido)
+            setInputEmail(state.usuarioSeleccionado.email)
+            setInputNombreDeUsuario(state.usuarioSeleccionado.nombreDeUsuario)
+            setInputGrupo(state.usuarioSeleccionado.grupo._id)
+            setInputEstado(state.usuarioSeleccionado.estado)
+            
+        } else if (location.pathname.includes("/home/usuarios/consultar-usuario")) {
+            setModo('C')
+            setInputNombre(state.usuarioSeleccionado.nombre)
+            setInputApellido(state.usuarioSeleccionado.apellido)
+            setInputEmail(state.usuarioSeleccionado.email)
+            setInputNombreDeUsuario(state.usuarioSeleccionado.nombreDeUsuario)
+            setInputGrupo(state.usuarioSeleccionado.grupo._id)
+            setInputEstado(state.usuarioSeleccionado.estado)
+        }
+        console.log(location)
+    }, [])
 
 
     useEffect(() => {
@@ -36,11 +67,11 @@ const UsuarioForm: FunctionComponent = (props) => {
         getGrupos()
     }, [])
 
-    const { state, dispatch } = useContext(UserContext)
-    const history = useHistory()
 
-    const handleSubmit = async (e: Event) => {
+
+    const handleModificarUsuario = async (e: Event): Promise<void> => {
         e.preventDefault()
+        if(inputConfirmarClave !== inputConfirmarClave) setError("Las claves no coinciden")
         const payload = {
             nombre: inputNombre,
             apellido: inputApellido,
@@ -50,8 +81,33 @@ const UsuarioForm: FunctionComponent = (props) => {
             grupo: inputGrupo
         }
         try {
+            setIsLoading(true)
+            let { data } = await axios.post('/api/admin/modificar-usuario', payload, axiosConfig(state.credentials.token))
+            dispatch({
+                type: "MODIFICAR_USUARIO",
+                payload: data.usuario
+            })
+            setMessage(data.message)
+        } catch (error) {
+            setError(error.response.data.error)
+        }
+        setIsLoading(false)
+    }
+
+    const handleAgregarUsuario = async (e: Event): Promise<void> => {
+        e.preventDefault()
+        if(inputConfirmarClave !== inputConfirmarClave) setError("Las claves no coinciden")
+        const payload = {
+            nombre: inputNombre,
+            apellido: inputApellido,
+            email: inputEmail,
+            nombreDeUsuario: inputNombreDeUsuario,
+            clave: inputClave,
+            grupo: inputGrupo
+        }
+        try {
+            setIsLoading(true)
             let { data } = await axios.post('/api/admin/agregar-usuario', payload, axiosConfig(state.credentials.token))
-            console.log(data)
             dispatch({
                 type: 'AGREGAR_USUARIO',
                 payload: data.usuario
@@ -60,6 +116,7 @@ const UsuarioForm: FunctionComponent = (props) => {
         } catch (error) {
             setError(error.response.data.error)
         }
+        setIsLoading(false)
     }
     return (
         <Row className="m-0 justify-content-center align-items-center h-100">
@@ -77,7 +134,15 @@ const UsuarioForm: FunctionComponent = (props) => {
                             >Volver</Button>
                         </div>
                     </Fragment> :
-                    <form onSubmit={(e: any) => handleSubmit(e)}>
+                    <form onSubmit={(e: any) => {
+                        if(modo==="A"){
+                            handleAgregarUsuario(e)
+                        } else if( modo === "M") {
+                            handleModificarUsuario(e)
+                        } else {
+                            return;
+                        }
+                    }}>
                         {
                             error &&
                             <Fragment>
@@ -91,6 +156,8 @@ const UsuarioForm: FunctionComponent = (props) => {
                                 required
                                 type="text"
                                 placeholder="Nombre"
+                                disabled= { modo === "C" }
+                                value={inputNombre}
                                 
                             />
                             <Form.Label>Apellido</Form.Label>
@@ -99,6 +166,8 @@ const UsuarioForm: FunctionComponent = (props) => {
                                 required
                                 type="text"
                                 placeholder="Apellido"
+                                disabled= { modo === "C" }
+                                value={inputApellido}
                                 
                             />
                             <Form.Label>email</Form.Label>
@@ -107,6 +176,8 @@ const UsuarioForm: FunctionComponent = (props) => {
                                 required
                                 type="email"
                                 placeholder="email@ejemplo.com"
+                                disabled= { modo === "C" }
+                                value={inputEmail}
                                 
                             />
                             <Form.Label>Nombre de usuario</Form.Label>
@@ -115,6 +186,8 @@ const UsuarioForm: FunctionComponent = (props) => {
                                 required
                                 type="text"
                                 placeholder="nombre de usuario"
+                                disabled= { modo === "C" }
+                                value={inputNombreDeUsuario}
                                 
                             />
                             <Form.Label>Clave</Form.Label>
@@ -123,7 +196,7 @@ const UsuarioForm: FunctionComponent = (props) => {
                                 required
                                 type="password"
                                 placeholder="******"
-                                
+                                disabled= { modo === "C" }
                             />
                             <Form.Label>Confirmar clave</Form.Label>
                             <Form.Control 
@@ -131,13 +204,33 @@ const UsuarioForm: FunctionComponent = (props) => {
                                 required
                                 type="password"
                                 placeholder="******"
-                                
+                                disabled= { modo === "C" }
                             />
+                            {
+                                (modo === "M" || modo === "C") &&
+                                    <Fragment>
+                                        
+                                        <Form.Label>Estado</Form.Label>
+                                        <Form.Control
+                                            as="select"
+                                            required
+                                            onChange={(e: any) => setInputEstado(e.target.value)}
+                                            disabled= { modo === "C" }
+                                            value={inputEstado}
+                                        >
+                                            <option>Activo</option>
+                                            <option>Inactivo</option>
+                                        </Form.Control>
+                                    </Fragment>
+                            }
                             <Form.Label>Grupo</Form.Label>
                             <Form.Control 
                                 onChange={(e: any) => setInputGrupo(e.target.value)}
                                 required
                                 as="select"
+                                disabled= { modo === "C" }
+                                value={inputGrupo}
+                                
                             >
                                 <option>Seleccione un grupo</option>
                                 {
@@ -150,19 +243,51 @@ const UsuarioForm: FunctionComponent = (props) => {
                                     ))
                                 }
                             </Form.Control>
-                            <div className="col text-center">
-                                <Button 
-                                    type="submit"
-                                    className="m-3 text-center"
-                                    variant="success"
-                                >Agregar</Button>
-                                <Button 
-                                    variant="danger"
-                                    type="submit"
-                                    className="m-3 text-center"
-                                    onClick={() => history.goBack()}
-                                >Cancelar</Button>
-                            </div>
+                            {
+                                (modo === "A" || modo === "M") &&
+                                    <div className="col text-center">
+                                        <Button 
+                                            type="submit"
+                                            className="m-3 text-center"
+                                            variant="success"
+                                            >
+                                                {
+                                                    isLoading && 
+                                                    <Spinner 
+                                                    as="span"
+                                                    animation="border"
+                                                    variant="light"
+                                                    size="sm"
+                                                    />
+                                                    
+                                                }
+                                                {
+                                                    !isLoading && "Agregar"
+                                                }
+                                                </Button>
+                                        <Button 
+                                            variant="danger"
+                                            type="submit"
+                                            className="m-3 text-center"
+                                            onClick={() => history.goBack()}
+                                            >
+                                            Cancelar
+                                        </Button>
+                                    </div>
+                            }
+                            {
+                                modo === "C" &&
+                                <Col className="text-center">
+                                    <Button
+                                        variant="primary"
+                                        className="m-3 text-ceter"
+                                        onClick={() => history.goBack()}
+                                    >
+                                        Volver
+                                    </Button>
+                                </Col>
+                            }
+
                         </Form.Group>
                     </form>
                 }

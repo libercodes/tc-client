@@ -63,11 +63,11 @@ export type Action =
     | { type: 'LOGOUT'; payload: any }
     | { type: 'AGREGAR_USUARIO';  payload: Usuario }
     | { type: 'MODIFICAR_USUARIO'; payload: Usuario }
-    | { type: 'ELIMINAR_USUARIO'; payload: Usuario }
+    | { type: 'ELIMINAR_USUARIO'; payload: string }
     | { type: 'CONSULTAR_USUARIO'; payload: Usuario[] }
     | { type: 'AGREGAR_GRUPO'; payload: Grupo}
     | { type: 'MODIFICAR_GRUPO'; payload: Grupo }
-    | { type: 'ELIMINAR_GRUPO'; payload: Grupo }
+    | { type: 'ELIMINAR_GRUPO'; payload: string }
     | { type: 'CONSULTAR_GRUPO';payload: Grupo[] }
     | { type: 'CONSULTAR_MOVIMIENTO'; payload: Movimiento[] }
     | { type: 'CONSULTAR_SESION'; payload: Sesion[] }

@@ -61,6 +61,14 @@ const Home = () => {
                             path="/home/usuarios/agregar-usuario"
                             component={UsuarioForm}
                         />
+                        <Route  
+                            path="/home/usuarios/modificar-usuario/:id"
+                            component={UsuarioForm}
+                        />
+                        <Route  
+                            path="/home/usuarios/consultar-usuario/:id"
+                            component={UsuarioForm}
+                        />
 
                     </Switch>
                 </div>

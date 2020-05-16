@@ -62,11 +62,11 @@ const GrupoComponent = () => {
         if(poseeUsuarios.length > 0){
 
         } else {
-            let { data } = await axios.delete(`/api/admin$/${grupo._id}`, getConfig(state.credentials.token))
+            let { data } = await axios.delete(`/api/admin$/eliminar-grupo/${grupo._id}`, getConfig(state.credentials.token))
             if(data){
                 dispatch({
                     type: "ELIMINAR_GRUPO",
-                    payload: grupo
+                    payload: data
                 })
                 console.log(data)
                 SetShowDeleteModal(false)
@@ -131,7 +131,7 @@ const GrupoComponent = () => {
                                 {
                                     filteredList.length > 0 &&
                                     filteredList.map(grupo => (
-                                        <Fragment key={grupo._id}>
+                                        <tr key={grupo._id}>
                                             <td>{grupo._id}</td>
                                             <td>{grupo.nombre}</td>
                                             <td>
@@ -153,7 +153,7 @@ const GrupoComponent = () => {
                                                     onClick={()=>{}}
                                                 >Consultar</Visibility>
                                             </td>
-                                        </Fragment>
+                                        </tr>
                                     ))
                                 }
                             </tbody>
