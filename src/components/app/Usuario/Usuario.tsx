@@ -11,9 +11,6 @@ import {
 } from 'react-bootstrap'
 import { UserContext } from '../../../context/context'
 import { State, Usuario } from '../../../utils/types'
-import Modal from '../../Modal'
-import getConfig from '../../../utils/axiosConfig'
-import { Link } from 'react-router-dom'
 
 import { 
     Delete,
@@ -27,13 +24,16 @@ const UsuarioComponent = () => {
     const history = useHistory()
     const state : State = useContext(UserContext).state
     const dispatch = useContext(UserContext).dispatch
-    const [ showDeleteModal, SetShowDeleteModal ] = useState(false)
-    const [ modalDescription, setModalDescription ] = useState('')
     const [ filteredList, setFilteredList ] = useState(state.listaDeUsuarios)
     useEffect(() => setFilteredList(state.listaDeUsuarios), [state.listaDeUsuarios])
 
     const FilterList = (query: string) => 
-        setFilteredList(state.listaDeUsuarios.filter(usuario => usuario.nombreDeUsuario.toUpperCase().includes(query.toUpperCase())))
+        setFilteredList(state.listaDeUsuarios.filter(
+            usuario => usuario.nombreDeUsuario.toUpperCase().includes(query.toUpperCase())
+            || usuario.nombre.toUpperCase().includes(query.toUpperCase()) 
+            || usuario.apellido.toUpperCase().includes(query.toUpperCase()) 
+            || usuario.email.toUpperCase().includes(query.toUpperCase()) 
+        ))
 
     
     useEffect(() => {
@@ -57,61 +57,33 @@ const UsuarioComponent = () => {
         history.push(`/home/usuarios/consultar-usuario/${usuario._id}`)
     }
 
-    const handleShowModal = (usuario: Usuario) => {
-        setModalDescription(`Desea borrar el usuario "${state.usuarioSeleccionado.nombreDeUsuario}"?`)
+    const handleEliminarUsuario = async (usuario: Usuario) => {
         dispatch({ type: "SELECCIONAR_USUARIO", payload: usuario })
-        SetShowDeleteModal(true)
-    }
-
-    const handleDelete = async (usuario: Usuario) => {
-        SetShowDeleteModal(true)
-        let { data } = await axios.delete(`/api/admin$/eliminar-usuario/${usuario._id}`, getConfig(state.credentials.token))
-            if(data){
-                dispatch({
-                    type: "ELIMINAR_USUARIO",
-                    payload: data
-                })
-                console.log(data)
-                setModalDescription('')
-                //setSelectedValue({})
-                SetShowDeleteModal(false)
-            }
+        history.push(`/home/usuarios/eliminar-usuario/${usuario._id}`)
     }
 
     return(
-        <Fragment>
-            
-            <Modal 
-                show={showDeleteModal}
-                onCancel={() => SetShowDeleteModal(false)}
-                title="Borrar grupo"
-                description={modalDescription}
-                nameAgreeButton={"Eliminar"}
-                onAgree={() => handleDelete(state.usuarioSeleccionado)}
-            />
-            
+        <Fragment>  
             <Container fluid className="h-100 justify-content-center align-items-center">
                 <Row className="justify-content-center">
-                    <Col sm={8} className="bg-primary text-light py-2">
+                    <Col sm={8} className="bg-light mt-2 py-3">
                         <Row>
                             <Col sm={6} className="text-center">
                                 <h2>Administrar <b>usuarios</b></h2>
                             </Col>
                             <Col sm={6} className="text-center">
-                                <Button variant="success"> 
-                                    <PersonAdd/> 
-                                    <Link
-                                        to="/home/usuarios/agregar-usuario"
-                                    >
-                                        Agregar usuario
-                                    </Link>
+                                <Button 
+                                    variant="success"
+                                    onClick={() => history.push("/home/usuarios/agregar-usuario")}
+                                > 
+                                    <PersonAdd/>  Agregar usuario
                                 </Button>
                             </Col>
                         </Row>
                     </Col>
                 </Row>
-                <Row className="justify-content-center my-3">
-                    <Col sm={8} className="bg-light py-2 rounded">
+                <Row className="justify-content-center mb-3">
+                    <Col sm={8} className="bg-light py-3">
                         <Row className="justify-content-center">
                             <Col sm={1} xs={1} className="d-flex align-items-center justify-content-end p-0">
                                 <Search/>
@@ -119,7 +91,7 @@ const UsuarioComponent = () => {
                             <Col sm={6} xs={10}>
                                 <Form.Control 
                                     type="text"
-                                    placeholder="Nombre de usuario"
+                                    placeholder="Filtrar por usuario, email, nombre, apellido..."
                                     onChange={(e:any) => FilterList(e.target.value)}
                                     />
                             </Col>
@@ -157,7 +129,7 @@ const UsuarioComponent = () => {
                                                 <Delete 
                                                     className="mx-1"
                                                     onClick={() => 
-                                                        handleShowModal(usuario)
+                                                        handleEliminarUsuario(usuario)
                                                     }
                                                 >Eliminar</Delete>
                                                 <Visibility 

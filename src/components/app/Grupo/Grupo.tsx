@@ -12,15 +12,13 @@ import {
 
 import { UserContext } from '../../../context/context'
 import { State, Usuario, Grupo } from '../../../utils/types'
-import Modal from '../../Modal'
-import getConfig from '../../../utils/axiosConfig'
 import { 
     Edit,
     Delete,
     Security,
     Visibility
 } from '../../Icons/ActionIcons'
-
+import { useHistory } from 'react-router-dom'
 import { GroupAdd, Search } from '@material-ui/icons'
 
 
@@ -35,10 +33,11 @@ const GrupoComponent = () => {
 
     const FilterList = (query: string) => 
         setFilteredList(state.listaDeGrupos.filter(grupo => grupo.nombre.toUpperCase().includes(query.toUpperCase())))
-
+    const history = useHistory()
     useEffect(() => {
         const getGrupos = async() => {
             let { data } = await axios.get('/api/admin/consultar-grupo', axiosConfig(state.credentials.token))
+            console.log(data)
             dispatch({
                 type: 'CONSULTAR_GRUPO',
                 payload: data
@@ -47,62 +46,43 @@ const GrupoComponent = () => {
         getGrupos()
     }, [])
 
-    const handleEdit = (grupo: Grupo) => {
-
+    const handleModificar = (grupo: Grupo) => {
+        dispatch({ type: 'SELECCIONAR_GRUPO', payload: grupo })
+        history.push(`/home/grupos/modificar-grupo/${grupo._id}`)
     }
 
-    const handleShowModal = (grupo: Grupo) => {
-        dispatch({ type: 'SELECCIONAR_GRUPO' , payload: grupo })
-        SetShowDeleteModal(true)
+    const handleConsultar = (grupo: Grupo) => {
+        dispatch({ type: 'SELECCIONAR_GRUPO', payload: grupo })
+        history.push(`/home/grupos/consultar-grupo/${grupo._id}`)
     }
 
-    const handleDelete = async (grupo: Grupo) => {
-        SetShowDeleteModal(true)
-        const poseeUsuarios: Usuario[] = state.listaDeUsuarios.filter(usuario => usuario.grupo._id == grupo._id)
-        if(poseeUsuarios.length > 0){
-
-        } else {
-            let { data } = await axios.delete(`/api/admin$/eliminar-grupo/${grupo._id}`, getConfig(state.credentials.token))
-            if(data){
-                dispatch({
-                    type: "ELIMINAR_GRUPO",
-                    payload: data
-                })
-                console.log(data)
-                SetShowDeleteModal(false)
-            }
-        }
+    const handleEliminarUsuario = async (grupo: Grupo) => {
+        dispatch({ type: 'SELECCIONAR_GRUPO', payload: grupo })
+        history.push(`/home/grupos/eliminar-grupo/${grupo._id}`)
     }
 
     return(
         <Fragment>
-            
-            <Modal 
-                show={showDeleteModal}
-                onCancel={() => SetShowDeleteModal(false)}
-                title="Borrar grupo"
-                description={`Desea borrar el grupo "${state.grupoSeleccionado.nombre}"?`}
-                nameAgreeButton={"Eliminar"}
-                onAgree={() => handleDelete(state.grupoSeleccionado)}
-            />
-            
             <Container fluid className="h-100 justify-content-center align-items-center">
                 <Row className="justify-content-center">
-                    <Col sm={8} className="bg-primary text-light py-2">
+                    <Col sm={8} className="bg-light mt-2 py-3">
                         <Row>
                             <Col sm={6} className="text-center">
                                 <h2>Administrar <b>grupos</b></h2>
                             </Col>
                             <Col sm={6} className="text-center">
-                                <Button variant="success"> 
+                                <Button 
+                                    variant="success"
+                                    onClick={() => history.push("/home/grupos/agregar-grupo")}
+                                > 
                                     <GroupAdd/> Agregar Grupo
                                 </Button>
                             </Col>
                         </Row>
                     </Col>
                 </Row>
-                <Row className="justify-content-center my-3">
-                    <Col sm={8} className="bg-light py-2 rounded">
+                <Row className="justify-content-center mb-3">
+                    <Col sm={8} className="bg-light py-3 ">
                         <Row className="justify-content-center">
                             <Col sm={1} xs={1} className="d-flex align-items-center justify-content-end p-0">
                                 <Search/>
@@ -137,12 +117,12 @@ const GrupoComponent = () => {
                                             <td>
                                                 <Edit 
                                                     className="mx-1"
-                                                    onClick={() => handleEdit(grupo)}
+                                                    onClick={() => handleModificar(grupo)}
                                                 >Editar</Edit>
                                                 <Delete
                                                     className="mx-1"
                                                     onClick={() => 
-                                                        handleShowModal(grupo)
+                                                        handleEliminarUsuario(grupo)
                                                     }
                                                 >Eliminar</Delete>
                                                 <Security 
@@ -150,7 +130,7 @@ const GrupoComponent = () => {
                                                     onClick={() => {}}
                                                 >Permisos</Security>
                                                 <Visibility
-                                                    onClick={()=>{}}
+                                                    onClick={()=> handleConsultar(grupo)}
                                                 >Consultar</Visibility>
                                             </td>
                                         </tr>

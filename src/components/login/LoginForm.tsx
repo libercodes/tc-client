@@ -28,6 +28,7 @@ const LoginForm: FunctionComponent = (props) => {
             })
 
         } catch (error) {
+            cookies.remove('token')
             console.log(error.response.data.error)
             setError(error.response.data.error)
         } 

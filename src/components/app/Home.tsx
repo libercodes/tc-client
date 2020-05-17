@@ -8,6 +8,7 @@ import { Col, Row } from 'react-bootstrap'
 import styled from 'styled-components'
 import SideBar from '../navbar/SideBar'
 import UsuarioForm from './Usuario/UsuarioForm'
+import GrupoForm from './Grupo/GrupoForm'
 const PageContentWrapper = styled(Col)`
     min-width: 0;
     width: 100%;
@@ -47,6 +48,7 @@ const Home = () => {
                         <Route
                             path="/home/grupos"
                             component={Grupo}
+                            exact
                         />
                         <Route
                             path="/home/usuarios"
@@ -69,7 +71,26 @@ const Home = () => {
                             path="/home/usuarios/consultar-usuario/:id"
                             component={UsuarioForm}
                         />
-
+                        <Route  
+                            path="/home/usuarios/eliminar-usuario/:id"
+                            component={UsuarioForm}
+                        />
+                        <Route  
+                            path="/home/grupos/agregar-grupo/"
+                            component={GrupoForm}
+                        />
+                        <Route  
+                            path="/home/grupos/modificar-grupo/:id"
+                            component={GrupoForm}
+                        />
+                        <Route  
+                            path="/home/grupos/consultar-grupo/:id"
+                            component={GrupoForm}
+                        />
+                        <Route  
+                            path="/home/grupos/eliminar-grupo/:id"
+                            component={GrupoForm}
+                        />
                     </Switch>
                 </div>
             </PageContentWrapper>

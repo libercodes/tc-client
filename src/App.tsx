@@ -26,20 +26,25 @@ const App = () => {
             if(!state.isAuth){
                 const token = cookies.get('token')
                 if(token){
-
-                    let response = await axios.get('/api/admin/obtener-usuario',{ 
-                        headers: {
-                            'Authorization' : token
-                        }
-                    })
-                    console.log(response)
-                    dispatch({
-                        type: 'LOGIN',
-                        payload: {
-                            token: token,
-                            usuario: response.data
-                        }
-                    })
+                    try {
+                        let response = await axios.get('/api/admin/obtener-usuario',{ 
+                            headers: {
+                                'Authorization' : token
+                            }
+                        })
+                        console.log(response)
+                        dispatch({
+                            type: 'LOGIN',
+                            payload: {
+                                token: token,
+                                usuario: response.data
+                            }
+                        })
+                        
+                    } catch (error) {
+                        cookies.remove('token')
+                        
+                    }
                 }
                 dispatch({ type: "SET_IS_LOADING", payload: false})
             }
