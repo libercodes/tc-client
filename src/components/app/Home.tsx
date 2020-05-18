@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import SideBar from '../navbar/SideBar'
 import UsuarioForm from './Usuario/UsuarioForm'
 import GrupoForm from './Grupo/GrupoForm'
+import Perfil from './Perfil/Perfil'
 const PageContentWrapper = styled(Col)`
     min-width: 0;
     width: 100%;
@@ -90,6 +91,10 @@ const Home = () => {
                         <Route  
                             path="/home/grupos/eliminar-grupo/:id"
                             component={GrupoForm}
+                        />
+                        <Route
+                            path="/home/perfil"
+                            component={Perfil}
                         />
                     </Switch>
                 </div>

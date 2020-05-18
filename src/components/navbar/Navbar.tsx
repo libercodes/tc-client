@@ -10,7 +10,7 @@ import { UserContext } from '../../context/context'
 import { State } from '../../utils/types'
 import Modal from '../Modal'
 import Axios from 'axios'
-import { Redirect } from 'react-router-dom'
+import { Redirect, useHistory } from 'react-router-dom'
 import cookies from 'js-cookie'
 import {
     AccountCircle, ExitToApp
@@ -22,7 +22,7 @@ type Props = {
 
 
 const NavbarComponent = ({ setOpenSideBar, openSideBar }: Props) => {
-        
+    const history = useHistory()
     const state: State = useContext(UserContext).state
     const dispatch = useContext(UserContext).dispatch
     const [ showModal, setShowModal ] = useState(false)
@@ -64,12 +64,10 @@ const NavbarComponent = ({ setOpenSideBar, openSideBar }: Props) => {
 
                     </Navbar.Collapse>
                     <Navbar.Collapse className="justify-content-end">
-                        {/* <Navbar.Text>
-                            Usuario: {state.credentials.usuario.nombreDeUsuario}
-                        </Navbar.Text> */}
                         <Nav>
                             <NavDropdown title={`Usuario: ${state.credentials.usuario.nombreDeUsuario}`} id="basic-nav-dropdown">
                                 <NavDropdown.Item
+                                    onClick={() => history.push('/home/perfil')}
                                     href="#"
                                 > 
                                     <AccountCircle /> Perfil
