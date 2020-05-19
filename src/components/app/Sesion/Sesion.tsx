@@ -40,7 +40,7 @@ const SesionComponent = () => {
         <Fragment>
             <Container fluid className="h-100 justify-content-center align-items-center">
                 <Row className="justify-content-center">
-                    <Col sm={8} className="bg-primary text-light py-2">
+                    <Col sm={8} className="bg-light py-3 mt-2">
                         <Row>
                             <Col sm={12} className="text-center">
                                 <h2>Consultar <b>sesiones</b></h2>
@@ -49,8 +49,8 @@ const SesionComponent = () => {
                         </Row>
                     </Col>
                 </Row>
-                <Row className="justify-content-center my-3">
-                    <Col sm={8} className="bg-light py-2 rounded">
+                <Row className="justify-content-center mb-3">
+                    <Col sm={8} className="bg-light py-3">
                         <Row className="justify-content-center">
                             <Col sm={1} xs={1} className="d-flex align-items-center justify-content-end p-0">
                                 <Search/>
@@ -67,7 +67,7 @@ const SesionComponent = () => {
                 </Row>
                 <Row className="justify-content-center overflow-auto">
                     <Col sm={8}>
-                        <Table variant="dark">
+                        <Table variant="dark" >
                             <thead>
                                 <tr>
                                     <th>Usuario</th>

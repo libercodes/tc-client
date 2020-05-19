@@ -36,10 +36,19 @@ const UsuarioForm: FunctionComponent = (props) => {
     const location = useLocation()
     
     useEffect(() => {
+        const getGrupos = async() => {
+            let { data } = await axios.get('/api/admin/listar-grupos', axiosConfig(state.credentials.token))
+            dispatch({
+                type: 'LISTAR_GRUPOS',
+                payload: data
+            })
+        }
+
         if (location.pathname == "/home/usuarios/agregar-usuario") {
             setModo('A')
             setTitle('Usuario agregado')
             setButtonTitle('Agregar')
+            getGrupos()
         } else if (location.pathname.includes("/home/usuarios/modificar-usuario")) {
             setModo('M')
             setButtonTitle('Guardar')
@@ -50,7 +59,7 @@ const UsuarioForm: FunctionComponent = (props) => {
             setInputNombreDeUsuario(state.usuarioSeleccionado.nombreDeUsuario)
             setInputGrupo(state.usuarioSeleccionado.grupo._id)
             setInputEstado(state.usuarioSeleccionado.estado)
-            
+            getGrupos()
         } else if (location.pathname.includes("/home/usuarios/consultar-usuario")) {
             setModo('C')
             setInputNombre(state.usuarioSeleccionado.nombre)
@@ -71,22 +80,6 @@ const UsuarioForm: FunctionComponent = (props) => {
             setInputEstado(state.usuarioSeleccionado.estado)
         }
     }, [])
-
-
-    useEffect(() => {
-        
-        const getGrupos = async() => {
-            let { data } = await axios.get('/api/admin/listar-grupos', axiosConfig(state.credentials.token))
-            dispatch({
-                type: 'LISTAR_GRUPOS',
-                payload: data
-            })
-        }
-        (modo==='A' || modo ==='M') && getGrupos()
-    }, [])
-
-
-
     const handleModificarUsuario = async (e: Event): Promise<void> => {
         e.preventDefault()
         const payload = {
@@ -188,6 +181,8 @@ const UsuarioForm: FunctionComponent = (props) => {
                                 onChange={(e: any) => setInputNombre(e.target.value)}
                                 required={modo!=="B"}
                                 type="text"
+                                minLength={2}
+                                maxLength={30}
                                 placeholder="Nombre"
                                 disabled= { modo === "C" || modo === "B" }
                                 value={inputNombre}
@@ -198,6 +193,8 @@ const UsuarioForm: FunctionComponent = (props) => {
                                 onChange={(e: any) => setInputApellido(e.target.value)}
                                 required={modo!=="B"}
                                 type="text"
+                                minLength={2}
+                                maxLength={30}
                                 placeholder="Apellido"
                                 disabled= { modo === "C" || modo === "B" }
                                 value={inputApellido}
@@ -218,6 +215,8 @@ const UsuarioForm: FunctionComponent = (props) => {
                                 onChange={(e: any) => setInputNombreDeUsuario(e.target.value)}
                                 required={modo!=="B"}
                                 type="text"
+                                minLength={4}
+                                maxLength={30}
                                 placeholder="nombre de usuario"
                                 disabled= { modo === "C" || modo === "B" }
                                 value={inputNombreDeUsuario}
@@ -232,6 +231,8 @@ const UsuarioForm: FunctionComponent = (props) => {
                                             required={modo==="A"}
                                             type="password"
                                             placeholder="******"
+                                            minLength={6}
+                                            maxLength={24}
                                         />
                                         <Form.Label>Confirmar clave</Form.Label>
                                         <Form.Control 
@@ -239,6 +240,8 @@ const UsuarioForm: FunctionComponent = (props) => {
                                             required={modo==="A"}
                                             type="password"
                                             placeholder="******"
+                                            minLength={6}
+                                            maxLength={24}
                                         />
                                     </Fragment>
                             }

@@ -1,5 +1,14 @@
 import React, { useContext } from 'react'
-import { Row, Col, Table, Badge, OverlayTrigger, Tooltip, Button } from 'react-bootstrap'
+import { 
+    Row, 
+    Col, 
+    Table, 
+    Badge, 
+    OverlayTrigger, 
+    Tooltip, 
+    Button,
+    Alert
+} from 'react-bootstrap'
 import { UserContext } from '../../../context/context'
 import { useHistory } from 'react-router-dom'
 
@@ -21,6 +30,12 @@ const Perfil = () => {
                  <h1 className="text-center">
                     <u>Perfil</u>
                 </h1>
+                {
+                    state.credentials.usuario.estado === "Nuevo" &&
+                    <Alert variant="warning">
+                        Por favor actualice su clave para finalizar el proceso de registro.
+                    </Alert>
+                }
                  <Table variant="light">
                     <tbody>
                         <tr>
