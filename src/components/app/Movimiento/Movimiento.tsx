@@ -10,32 +10,39 @@ import {
     Form
 } from 'react-bootstrap'
 import { UserContext } from '../../../context/context'
-import { State, Usuario } from '../../../utils/types'
+import { State, Usuario, Movimiento } from '../../../utils/types'
 import moment from 'moment'
 import { Search } from '@material-ui/icons'
+import { Visibility } from '../../Icons/ActionIcons'
+import { useHistory } from 'react-router-dom'
 
-const SesionComponent = () => {
+const MovimientoComponent = () => {
+    const history = useHistory()
     const state : State = useContext(UserContext).state
     const dispatch = useContext(UserContext).dispatch
-    const [ filteredList, setFilteredList ] = useState(state.listaDeSesiones)
-    useEffect(() => setFilteredList(state.listaDeSesiones), [state.listaDeSesiones])
+    const [ filteredList, setFilteredList ] = useState(state.listaDeMovimientos)
+    useEffect(() => setFilteredList(state.listaDeMovimientos), [state.listaDeMovimientos])
 
     const FilterList = (query: string) => 
-        setFilteredList(state.listaDeSesiones.filter(sesion => sesion.usuario.nombreDeUsuario.toUpperCase().includes(query.toUpperCase())))
+        setFilteredList(state.listaDeMovimientos.filter(movimiento => movimiento.usuario.nombreDeUsuario.toUpperCase().includes(query.toUpperCase())))
 
         
     useEffect(() => {
         const getSesiones = async() => {
-            let { data } = await axios.get('/api/admin/sesiones', axiosConfig(state.credentials.token))
+            let { data } = await axios.get('/api/admin/movimientos', axiosConfig(state.credentials.token))
             console.log(data)
             dispatch({
-                type: 'LISTAR_SESIONES',
+                type: 'LISTAR_MOVIMIENTOS',
                 payload: data
             })
         }
         getSesiones()
     }, [])
 
+    const handleConsultar = (movimiento: Movimiento) => {
+        dispatch({ type: 'SELECCIONAR_MOVIMIENTO', payload: movimiento })
+        history.push(`/home/movimientos/consultar-movimiento/${movimiento._id}`)
+    }
     return(
         <Fragment>
             <Container fluid className="h-100 justify-content-center align-items-center">
@@ -71,8 +78,9 @@ const SesionComponent = () => {
                             <thead>
                                 <tr>
                                     <th>Usuario</th>
-                                    <th>Fecha de inicio</th>
-                                    <th>Fecha de finalizacion</th>
+                                    <th>Fecha</th>
+                                    <th>descripcion</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -80,11 +88,17 @@ const SesionComponent = () => {
                                 {
                                     (filteredList.length > 0 ) && 
                                     
-                                    filteredList.map(sesion => (
-                                        <tr key={sesion._id}>
-                                            <td>{sesion.usuario ? sesion.usuario.nombreDeUsuario : 'USUARIO BORRADO'}</td>
-                                            <td>{moment(sesion.fechaDeInicio).format('LLL')}</td>
-                                            <td>{moment(sesion.fechaDeFinalizacion).format('LLL')}</td>
+                                    filteredList.map(movimiento => (
+                                        <tr key={movimiento._id}>
+                                            <td>{movimiento.usuario ? movimiento.usuario.nombreDeUsuario : "USUARIO BORRADO"}</td>
+                                            <td>{moment(movimiento.fecha).format('LLL')}</td>
+                                            <td>{'Ver descripcion'}</td>
+                                            <td>
+                                                <Visibility 
+                                                    onClick={() => handleConsultar(movimiento)}
+                                                >Consultar</Visibility>
+                                            </td>
+                                            
                                         </tr>
                                     ))
                                 }
@@ -97,4 +111,4 @@ const SesionComponent = () => {
     )
 }
 
-export default SesionComponent
+export default MovimientoComponent

@@ -54,7 +54,7 @@ const GrupoForm: FunctionComponent = (props) => {
         const getGrupos = async() => {
             let { data } = await axios.get('/api/admin/consultar-grupo', axiosConfig(state.credentials.token))
             dispatch({
-                type: 'CONSULTAR_GRUPO',
+                type: 'LISTAR_GRUPOS',
                 payload: data
             })
         }

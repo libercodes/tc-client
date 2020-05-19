@@ -20,6 +20,7 @@ import {
 } from '../../Icons/ActionIcons'
 import { useHistory } from 'react-router-dom'
 import { GroupAdd, Search } from '@material-ui/icons'
+import { objetoAcciones } from '../../../utils/group-actions'
 
 
 
@@ -27,6 +28,11 @@ const GrupoComponent = () => {
     const state : State = useContext(UserContext).state
     const dispatch = useContext(UserContext).dispatch
     const [ showDeleteModal, SetShowDeleteModal ] = useState(false)
+
+    const VerificarPermisos = (permiso: string) => {
+        let indice = state.credentials.usuario.grupo.acciones.indexOf(permiso)
+        return indice === -1 ? false : true
+    }
 
     const [ filteredList, setFilteredList ] = useState(state.listaDeGrupos)
     useEffect(() => setFilteredList(state.listaDeGrupos), [state.listaDeGrupos])
@@ -36,10 +42,10 @@ const GrupoComponent = () => {
     const history = useHistory()
     useEffect(() => {
         const getGrupos = async() => {
-            let { data } = await axios.get('/api/admin/consultar-grupo', axiosConfig(state.credentials.token))
+            let { data } = await axios.get('/api/admin/listar-grupos', axiosConfig(state.credentials.token))
             console.log(data)
             dispatch({
-                type: 'CONSULTAR_GRUPO',
+                type: 'LISTAR_GRUPOS',
                 payload: data
             })
         }
@@ -59,6 +65,11 @@ const GrupoComponent = () => {
     const handleEliminarUsuario = async (grupo: Grupo) => {
         dispatch({ type: 'SELECCIONAR_GRUPO', payload: grupo })
         history.push(`/home/grupos/eliminar-grupo/${grupo._id}`)
+    }
+
+    const handleModificarPermisos = async (grupo: Grupo) => {
+        dispatch({ type: 'SELECCIONAR_GRUPO', payload: grupo })
+        history.push(`/home/grupos/modificar-permisos/${grupo._id}`)
     }
 
     return(
@@ -115,20 +126,30 @@ const GrupoComponent = () => {
                                             <td>{grupo._id}</td>
                                             <td>{grupo.nombre}</td>
                                             <td>
-                                                <Edit 
-                                                    className="mx-1"
-                                                    onClick={() => handleModificar(grupo)}
-                                                >Editar</Edit>
-                                                <Delete
-                                                    className="mx-1"
-                                                    onClick={() => 
-                                                        handleEliminarUsuario(grupo)
-                                                    }
-                                                >Eliminar</Delete>
-                                                <Security 
-                                                    className="mx-1"
-                                                    onClick={() => {}}
-                                                >Permisos</Security>
+                                                {
+                                                    VerificarPermisos(objetoAcciones.GESTIONAR_GRUPO.MODIFICAR_GRUPO) &&
+                                                    <Edit 
+                                                        className="mx-1"
+                                                        onClick={() => handleModificar(grupo)}
+                                                    >Editar</Edit>
+
+                                                }
+                                                {
+                                                    VerificarPermisos(objetoAcciones.GESTIONAR_GRUPO.ELIMINAR_GRUPO) &&
+                                                    <Delete
+                                                        className="mx-1"
+                                                        onClick={() => handleEliminarUsuario(grupo)}
+                                                    >Eliminar</Delete>
+
+                                                }
+                                                {
+                                                    VerificarPermisos(objetoAcciones.GESTIONAR_GRUPO.MODIFICAR_GRUPO) &&
+                                                    <Security 
+                                                        className="mx-1"
+                                                        onClick={() => handleModificarPermisos(grupo)}
+                                                    >Permisos</Security>
+
+                                                }
                                                 <Visibility
                                                     onClick={()=> handleConsultar(grupo)}
                                                 >Consultar</Visibility>

@@ -74,29 +74,29 @@ const UsuarioForm: FunctionComponent = (props) => {
 
 
     useEffect(() => {
+        
         const getGrupos = async() => {
-            let { data } = await axios.get('/api/admin/consultar-grupo', axiosConfig(state.credentials.token))
+            let { data } = await axios.get('/api/admin/listar-grupos', axiosConfig(state.credentials.token))
             dispatch({
-                type: 'CONSULTAR_GRUPO',
+                type: 'LISTAR_GRUPOS',
                 payload: data
             })
         }
-        getGrupos()
+        (modo==='A' || modo ==='M') && getGrupos()
     }, [])
 
 
 
     const handleModificarUsuario = async (e: Event): Promise<void> => {
         e.preventDefault()
-        if(inputConfirmarClave !== inputConfirmarClave) setError("Las claves no coinciden")
         const payload = {
             _id: state.usuarioSeleccionado._id,
             nombre: inputNombre,
             apellido: inputApellido,
             email: inputEmail,
             nombreDeUsuario: inputNombreDeUsuario,
-            clave: inputClave,
-            grupo: inputGrupo
+            grupo: inputGrupo,
+            estado: inputEstado
         }
         try {
             setIsLoading(true)
@@ -223,22 +223,25 @@ const UsuarioForm: FunctionComponent = (props) => {
                                 value={inputNombreDeUsuario}
                                 
                             />
-                            <Form.Label>Clave</Form.Label>
-                            <Form.Control 
-                                onChange={(e: any) => setInputClave(e.target.value)}
-                                required={modo==="A"}
-                                type="password"
-                                placeholder="******"
-                                disabled= { modo === "C" || modo === "B" }
-                            />
-                            <Form.Label>Confirmar clave</Form.Label>
-                            <Form.Control 
-                                onChange={(e: any) => setInputConfirmarClave(e.target.value)}
-                                required={modo==="A"}
-                                type="password"
-                                placeholder="******"
-                                disabled= { modo === "C" || modo === "B" }
-                            />
+                            {
+                                modo === "A"  &&
+                                    <Fragment>
+                                        <Form.Label>Clave</Form.Label>
+                                        <Form.Control 
+                                            onChange={(e: any) => setInputClave(e.target.value)}
+                                            required={modo==="A"}
+                                            type="password"
+                                            placeholder="******"
+                                        />
+                                        <Form.Label>Confirmar clave</Form.Label>
+                                        <Form.Control 
+                                            onChange={(e: any) => setInputConfirmarClave(e.target.value)}
+                                            required={modo==="A"}
+                                            type="password"
+                                            placeholder="******"
+                                        />
+                                    </Fragment>
+                            }
                             {
                                 (modo === "M" || modo === "C" || modo === "B") &&
                                     <Fragment>
@@ -253,6 +256,8 @@ const UsuarioForm: FunctionComponent = (props) => {
                                         >
                                             <option>Activo</option>
                                             <option>Inactivo</option>
+                                            <option>Nuevo</option>
+
                                         </Form.Control>
                                     </Fragment>
                             }
@@ -266,6 +271,12 @@ const UsuarioForm: FunctionComponent = (props) => {
                                 
                             >
                                 <option>Seleccione un grupo</option>
+                                {
+                                    modo==="C" &&
+                                    <option
+                                        value={state.usuarioSeleccionado.grupo._id}
+                                    >{state.usuarioSeleccionado.grupo.nombre}</option>
+                                }
                                 {
                                     state.listaDeGrupos.length > 0 &&
                                     state.listaDeGrupos.map(grupo => (

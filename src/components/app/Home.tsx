@@ -9,7 +9,10 @@ import styled from 'styled-components'
 import SideBar from '../navbar/SideBar'
 import UsuarioForm from './Usuario/UsuarioForm'
 import GrupoForm from './Grupo/GrupoForm'
+import PermisosForm from './Grupo/PermisosForm'
 import Perfil from './Perfil/Perfil'
+import Movimiento from './Movimiento/Movimiento'
+import MovimientoForm from './Movimiento/MovimientoForm'
 const PageContentWrapper = styled(Col)`
     min-width: 0;
     width: 100%;
@@ -93,9 +96,23 @@ const Home = () => {
                             component={GrupoForm}
                         />
                         <Route
+                            path="/home/grupos/modificar-permisos/:id"
+                            component={PermisosForm}
+                        />
+                        <Route
                             path="/home/perfil"
                             component={Perfil}
                         />
+                        <Route 
+                            path="/home/movimientos"
+                            component={Movimiento}
+                            exact
+                        />
+                        <Route 
+                            path="/home/movimientos/consultar-movimiento/:id"
+                            component={MovimientoForm}
+                        />
+                        
                     </Switch>
                 </div>
             </PageContentWrapper>

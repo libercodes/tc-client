@@ -11,6 +11,7 @@ import {
 } from 'react-bootstrap'
 import { UserContext } from '../../../context/context'
 import { State, Usuario } from '../../../utils/types'
+import { objetoAcciones } from '../../../utils/group-actions'
 
 import { 
     Delete,
@@ -27,6 +28,11 @@ const UsuarioComponent = () => {
     const [ filteredList, setFilteredList ] = useState(state.listaDeUsuarios)
     useEffect(() => setFilteredList(state.listaDeUsuarios), [state.listaDeUsuarios])
 
+    const VerificarPermisos = (permiso: string) => {
+        let indice = state.credentials.usuario.grupo.acciones.indexOf(permiso)
+        return indice === -1 ? false : true
+    }
+
     const FilterList = (query: string) => 
         setFilteredList(state.listaDeUsuarios.filter(
             usuario => usuario.nombreDeUsuario.toUpperCase().includes(query.toUpperCase())
@@ -38,9 +44,9 @@ const UsuarioComponent = () => {
     
     useEffect(() => {
         const getUsuarios = async() => {
-            let { data } = await axios.get('/api/admin/consultar-usuario', axiosConfig(state.credentials.token))
+            let { data } = await axios.get('/api/admin/listar-usuarios', axiosConfig(state.credentials.token))
             dispatch({
-                type: "CONSULTAR_USUARIO",
+                type: 'LISTAR_USUARIOS',
                 payload: data
             })
         }
@@ -72,12 +78,15 @@ const UsuarioComponent = () => {
                                 <h2>Administrar <b>usuarios</b></h2>
                             </Col>
                             <Col sm={6} className="text-center">
-                                <Button 
-                                    variant="success"
-                                    onClick={() => history.push("/home/usuarios/agregar-usuario")}
-                                > 
-                                    <PersonAdd/>  Agregar usuario
-                                </Button>
+                                {
+                                    VerificarPermisos(objetoAcciones.GESTIONAR_USUARIO.AGREGAR_USUARIO) &&
+                                    <Button 
+                                        variant="success"
+                                        onClick={() => history.push("/home/usuarios/agregar-usuario")}
+                                    > 
+                                        <PersonAdd/>  Agregar usuario
+                                    </Button>
+                                }
                             </Col>
                         </Row>
                     </Col>
@@ -122,16 +131,23 @@ const UsuarioComponent = () => {
                                             <td>{usuario.nombreDeUsuario}</td>
                                             <td>{usuario.email}</td>
                                             <td>
-                                                <Edit 
-                                                    className="mx-1"
-                                                    onClick={() => handleModificar(usuario)}
-                                                >Editar</Edit>
-                                                <Delete 
-                                                    className="mx-1"
-                                                    onClick={() => 
-                                                        handleEliminarUsuario(usuario)
-                                                    }
-                                                >Eliminar</Delete>
+                                                {
+                                                    VerificarPermisos(objetoAcciones.GESTIONAR_USUARIO.MODIFICAR_USUARIO) &&
+                                                    <Edit
+                                                        className="mx-1"
+                                                        onClick={() => handleModificar(usuario)}
+                                                    >Editar</Edit>
+
+                                                }
+                                                {
+                                                    (VerificarPermisos(objetoAcciones.GESTIONAR_USUARIO.ELIMINAR_USUARIO) && state.credentials.usuario._id !== usuario._id) &&
+                                                    <Delete 
+                                                        className="mx-1"
+                                                        onClick={() => 
+                                                            handleEliminarUsuario(usuario)
+                                                        }
+                                                    >Eliminar</Delete>
+                                                }
                                                 <Visibility 
                                                     onClick={() => handleConsultar(usuario)}
                                                 >Consultar</Visibility>

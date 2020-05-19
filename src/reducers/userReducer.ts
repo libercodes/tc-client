@@ -6,24 +6,25 @@ export const actions = {
         AGREGAR_USUARIO: "AGREGAR_USUARIO",
         MODIFICAR_USUARIO: "MODIFICAR_USUARIO",
         ELIMINAR_USUARIO: "ELIMINAR_USUARIO",
-        CONSULTAR_USUARIO: "CONSULTAR_USUARIO"
+        CONSULTAR_USUARIO: "LISTAR_USUARIOS"
     },
     GESTIONAR_GRUPO: {
         AGREGAR_GRUPO: "AGREGAR_GRUPO",
         MODIFICAR_GRUPO: "MODIFICAR_GRUPO",
         ELIMINAR_GRUPO: "ELIMINAR_GRUPO",
-        CONSULTAR_GRUPO: "CONSULTAR_GRUPO"
+        CONSULTAR_GRUPO: "LISTAR_GRUPOS"
     },
     GESTIONAR_MOVIMIENTO: {
-        CONSULTAR_MOVIMIENTO: "CONSULTAR_MOVIMIENTO"
+        CONSULTAR_MOVIMIENTO: "LISTAR_MOVIMIENTOS"
     },
     GESTIONAR_SESION: {
-        CONSULTAR_SESION: "CONSULTAR_SESION"
+        CONSULTAR_SESION: "LISTAR_SESIONES"
     },
     LOGIN: "LOGIN",
     LOGOUT: "LOGOUT",
     SELECCIONAR_GRUPO: "SELECCIONAR_GRUPO",
     SELECCIONAR_USUARIO: "SELECCIONAR_USUARIO",
+    SELECCIONAR_MOVIMIENTO: 'SELECCIONAR_MOVIMIENTO',
     SET_IS_LOADING: "SET_IS_LOADING"
 
 }
@@ -67,6 +68,14 @@ export const actions = {
             _id: '',
             nombre: '',
             acciones: []
+        }
+    },
+    movimientoSeleccionado: {
+        _id: '',
+        fecha: new Date(),
+        descripcion: ``,
+        usuario: {
+            nombreDeUsuario: ''
         }
     },
     isLoading: false
@@ -177,10 +186,15 @@ export const userReducer = (state: State, action: Action): State => {
                 ...state,
                 grupoSeleccionado: action.payload
             }
-         case actions.SELECCIONAR_USUARIO: 
+        case actions.SELECCIONAR_USUARIO: 
             return {
                 ...state,
                 usuarioSeleccionado: action.payload
+            }
+        case actions.SELECCIONAR_MOVIMIENTO:
+            return {
+                ...state,
+                movimientoSeleccionado: action.payload
             }
         case actions.SET_IS_LOADING:
             return {

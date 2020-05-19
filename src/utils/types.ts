@@ -16,7 +16,8 @@ export interface Usuario {
 export interface Grupo {
     _id: string
     nombre: string
-    acciones: string[]
+    acciones: string[],
+    __v?: any
 }
 
 export interface Sesion {
@@ -42,8 +43,10 @@ export interface Credentials {
 export interface Movimiento {
     _id: string
     fecha: Date,
-    accion: string,
-    usuario: Usuario
+    descripcion: string,
+    usuario: {
+        nombreDeUsuario: string
+    }
 }
 
 export type State = {
@@ -55,6 +58,7 @@ export type State = {
     listaDeSesiones: Sesion[]
     usuarioSeleccionado: Usuario
     grupoSeleccionado: Grupo
+    movimientoSeleccionado: Movimiento
     isLoading: boolean
 }
 
@@ -64,16 +68,18 @@ export type Action =
     | { type: 'AGREGAR_USUARIO';  payload: Usuario }
     | { type: 'MODIFICAR_USUARIO'; payload: Usuario }
     | { type: 'ELIMINAR_USUARIO'; payload: string }
-    | { type: 'CONSULTAR_USUARIO'; payload: Usuario[] }
+    | { type: 'LISTAR_USUARIOS'; payload: Usuario[] }
     | { type: 'AGREGAR_GRUPO'; payload: Grupo}
     | { type: 'MODIFICAR_GRUPO'; payload: Grupo }
     | { type: 'ELIMINAR_GRUPO'; payload: string }
-    | { type: 'CONSULTAR_GRUPO';payload: Grupo[] }
-    | { type: 'CONSULTAR_MOVIMIENTO'; payload: Movimiento[] }
-    | { type: 'CONSULTAR_SESION'; payload: Sesion[] }
+    | { type: 'LISTAR_GRUPOS';payload: Grupo[] }
+    | { type: 'LISTAR_MOVIMIENTOS'; payload: Movimiento[] }
+    | { type: 'LISTAR_SESIONES'; payload: Sesion[] }
     | { type: 'SELECCIONAR_GRUPO'; payload: Grupo }
     | { type: 'SELECCIONAR_USUARIO'; payload: Usuario }
+    | { type: 'SELECCIONAR_MOVIMIENTO'; payload: Movimiento }
     | { type: 'SET_IS_LOADING'; payload: boolean }
+
 
 
 
@@ -88,3 +94,4 @@ export interface ResponseWithMessage extends AxiosResponse {
         message: string
     }
 }
+
