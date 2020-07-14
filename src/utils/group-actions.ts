@@ -1,4 +1,3 @@
-import { useContext } from "react"
 
 export const objetoAcciones = {
     GESTIONAR_USUARIO: {

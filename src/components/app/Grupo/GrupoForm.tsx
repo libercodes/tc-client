@@ -29,7 +29,7 @@ const GrupoForm: FunctionComponent = (props) => {
     const location = useLocation()
     
     useEffect(() => {
-        if (location.pathname == "/home/grupos/agregar-grupo") {
+        if (location.pathname === "/home/grupos/agregar-grupo") {
             setModo('A')
             setTitle('Grupo Agregado.')
             setButtonTitle('Agregar')

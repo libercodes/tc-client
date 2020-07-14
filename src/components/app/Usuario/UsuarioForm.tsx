@@ -44,7 +44,7 @@ const UsuarioForm: FunctionComponent = (props) => {
             })
         }
 
-        if (location.pathname == "/home/usuarios/agregar-usuario") {
+        if (location.pathname === "/home/usuarios/agregar-usuario") {
             setModo('A')
             setTitle('Usuario agregado')
             setButtonTitle('Agregar')
@@ -316,7 +316,6 @@ const UsuarioForm: FunctionComponent = (props) => {
                                             !isLoading && 
                                                 <Button 
                                                     variant="secondary"
-                                                    type="submit"
                                                     className="m-3 text-center"
                                                     onClick={() => history.goBack()}
                                                 >

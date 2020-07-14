@@ -6,11 +6,10 @@ import {
     Container, 
     Col, 
     Row,
-    Button,
     Form
 } from 'react-bootstrap'
 import { UserContext } from '../../../context/context'
-import { State, Usuario, Movimiento } from '../../../utils/types'
+import { State, Movimiento } from '../../../utils/types'
 import moment from 'moment'
 import { Search } from '@material-ui/icons'
 import { Visibility } from '../../Icons/ActionIcons'
@@ -24,7 +23,13 @@ const MovimientoComponent = () => {
     useEffect(() => setFilteredList(state.listaDeMovimientos), [state.listaDeMovimientos])
 
     const FilterList = (query: string) => 
-        setFilteredList(state.listaDeMovimientos.filter(movimiento => movimiento.usuario.nombreDeUsuario.toUpperCase().includes(query.toUpperCase())))
+        setFilteredList(state.listaDeMovimientos.filter(movimiento => {
+            if(movimiento.usuario){
+                return movimiento.usuario.nombreDeUsuario.toUpperCase().includes(query.toUpperCase())
+            } else {
+                return false
+            }
+        }))
 
         
     useEffect(() => {

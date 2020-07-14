@@ -84,7 +84,6 @@ export const actions = {
 
 
 export const userReducer = (state: State, action: Action): State => {
-    const ValidateAuth = (): boolean => (state.credentials.token != null && state.credentials.usuario._id != null) ? true : false
     switch(action.type) {
         case actions.LOGIN:
             return {

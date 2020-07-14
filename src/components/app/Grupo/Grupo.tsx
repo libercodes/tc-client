@@ -11,7 +11,7 @@ import {
 } from 'react-bootstrap'
 
 import { UserContext } from '../../../context/context'
-import { State, Usuario, Grupo } from '../../../utils/types'
+import { State, Grupo } from '../../../utils/types'
 import { 
     Edit,
     Delete,
@@ -27,7 +27,6 @@ import { objetoAcciones } from '../../../utils/group-actions'
 const GrupoComponent = () => {
     const state : State = useContext(UserContext).state
     const dispatch = useContext(UserContext).dispatch
-    const [ showDeleteModal, SetShowDeleteModal ] = useState(false)
 
     const VerificarPermisos = (permiso: string) => {
         let indice = state.credentials.usuario.grupo.acciones.indexOf(permiso)

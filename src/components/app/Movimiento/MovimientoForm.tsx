@@ -3,14 +3,8 @@ import {
     Row, 
     Col, 
     Button,
-    Alert,
-    Form,
-    Spinner
 } from 'react-bootstrap'
-import { listaDeAcciones } from '../../../utils/group-actions'
 import { UserContext } from '../../../context/context'
-import axios from 'axios'
-import getConfig from '../../../utils/axiosConfig'
 import { useHistory } from 'react-router-dom'
 import moment from 'moment'
 

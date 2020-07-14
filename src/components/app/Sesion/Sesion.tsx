@@ -6,11 +6,10 @@ import {
     Container, 
     Col, 
     Row,
-    Button,
     Form
 } from 'react-bootstrap'
 import { UserContext } from '../../../context/context'
-import { State, Usuario } from '../../../utils/types'
+import { State } from '../../../utils/types'
 import moment from 'moment'
 import { Search } from '@material-ui/icons'
 
@@ -21,7 +20,13 @@ const SesionComponent = () => {
     useEffect(() => setFilteredList(state.listaDeSesiones), [state.listaDeSesiones])
 
     const FilterList = (query: string) => 
-        setFilteredList(state.listaDeSesiones.filter(sesion => sesion.usuario.nombreDeUsuario.toUpperCase().includes(query.toUpperCase())))
+        setFilteredList(state.listaDeSesiones.filter(sesion => {
+            if(sesion.usuario){
+                return sesion.usuario.nombreDeUsuario.toUpperCase().includes(query.toUpperCase())
+            } else {
+                return false
+            }
+        }))
 
         
     useEffect(() => {
