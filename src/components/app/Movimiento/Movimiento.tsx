@@ -42,7 +42,7 @@ const MovimientoComponent = () => {
             })
         }
         getSesiones()
-    }, [])
+    }, [dispatch, state.credentials.token])
 
     const handleConsultar = (movimiento: Movimiento) => {
         dispatch({ type: 'SELECCIONAR_MOVIMIENTO', payload: movimiento })

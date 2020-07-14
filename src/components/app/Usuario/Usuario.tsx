@@ -51,7 +51,7 @@ const UsuarioComponent = () => {
             })
         }
         getUsuarios()
-    },[])
+    },[dispatch, state.credentials.token])
 
     const handleModificar = (usuario: Usuario) => {
         dispatch({ type: "SELECCIONAR_USUARIO", payload: usuario })

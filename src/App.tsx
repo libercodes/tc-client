@@ -50,7 +50,7 @@ const App = () => {
             }
         }
         RecuperarSesion()
-    }, [])
+    }, [state.isAuth])
 
 
     return(

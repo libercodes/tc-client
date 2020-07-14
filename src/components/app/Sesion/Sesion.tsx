@@ -39,7 +39,7 @@ const SesionComponent = () => {
             })
         }
         getSesiones()
-    }, [])
+    }, [dispatch, state.credentials.token])
 
     return(
         <Fragment>

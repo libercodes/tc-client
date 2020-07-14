@@ -49,7 +49,7 @@ const GrupoComponent = () => {
             })
         }
         getGrupos()
-    }, [])
+    }, [state.credentials.token, dispatch])
 
     const handleModificar = (grupo: Grupo) => {
         dispatch({ type: 'SELECCIONAR_GRUPO', payload: grupo })

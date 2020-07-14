@@ -47,7 +47,7 @@ const GrupoForm: FunctionComponent = (props) => {
             setTitle('Grupo Eliminado.')
             setButtonTitle('Eliminar')
         }
-    }, [])
+    }, [location.pathname, state.grupoSeleccionado.nombre])
 
 
     useEffect(() => {
@@ -59,7 +59,7 @@ const GrupoForm: FunctionComponent = (props) => {
             })
         }
         getGrupos()
-    }, [])
+    }, [state.credentials.token, dispatch])
 
 
 

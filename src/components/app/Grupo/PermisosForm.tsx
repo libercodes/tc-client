@@ -20,7 +20,7 @@ const PermisosForm = () => {
     const [ isLoading, setIsLoading ] = useState(false)
     const [ message, setMessage ] = useState('')
 
-    useEffect(() => setPermisos([...state.grupoSeleccionado.acciones]), [])
+    useEffect(() => setPermisos([...state.grupoSeleccionado.acciones]), [state.grupoSeleccionado.acciones])
     const CargarPermisosExistentes = (permiso: string): boolean => {
         const index = state.grupoSeleccionado.acciones.indexOf(permiso)
         const grupoPoseePermiso: boolean = index === -1 ? false : true

@@ -79,7 +79,18 @@ const UsuarioForm: FunctionComponent = (props) => {
             setInputGrupo(state.usuarioSeleccionado.grupo._id)
             setInputEstado(state.usuarioSeleccionado.estado)
         }
-    }, [])
+    }, [
+        dispatch, 
+        location.pathname,
+        state.credentials.token,
+        state.usuarioSeleccionado.apellido,
+        state.usuarioSeleccionado.email,
+        state.usuarioSeleccionado.estado,
+        state.usuarioSeleccionado.grupo._id,
+        state.usuarioSeleccionado.nombre,
+        state.usuarioSeleccionado.nombreDeUsuario
+        
+    ])
     const handleModificarUsuario = async (e: Event): Promise<void> => {
         e.preventDefault()
         const payload = {
@@ -107,7 +118,7 @@ const UsuarioForm: FunctionComponent = (props) => {
 
     const handleAgregarUsuario = async (e: Event): Promise<void> => {
         e.preventDefault()
-        if(inputConfirmarClave !== inputConfirmarClave) setError("Las claves no coinciden")
+        if(inputConfirmarClave !== inputClave) setError("Las claves no coinciden")
         const payload = {
             nombre: inputNombre,
             apellido: inputApellido,
